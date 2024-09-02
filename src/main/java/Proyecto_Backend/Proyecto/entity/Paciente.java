@@ -34,8 +34,8 @@ public class Paciente {
     private Domicilio domicilio;
 
     @OneToMany(mappedBy = "paciente", cascade = CascadeType.REMOVE)
-    //@JsonManagedReference(value = "paciente-turno")
-    @JsonIgnore
+    @JsonManagedReference(value = "paciente-turno")
+    //@JsonIgnore
     private Set<Turno> turnoSet;
 
     @Override

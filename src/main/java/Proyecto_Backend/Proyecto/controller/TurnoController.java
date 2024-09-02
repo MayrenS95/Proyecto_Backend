@@ -1,6 +1,9 @@
 package Proyecto_Backend.Proyecto.controller;
 
 
+import Proyecto_Backend.Proyecto.dto.request.TurnoModifyDto;
+import Proyecto_Backend.Proyecto.dto.request.TurnoRequestDto;
+import Proyecto_Backend.Proyecto.dto.response.TurnoResponseDto;
 import Proyecto_Backend.Proyecto.entity.Turno;
 import Proyecto_Backend.Proyecto.service.ITurnoService;
 import Proyecto_Backend.Proyecto.service.impl.TurnoService;
@@ -17,17 +20,18 @@ public class TurnoController {
     private ITurnoService turnoService;
 
     public TurnoController(ITurnoService turnoService) {
+
         this.turnoService = turnoService;
     }
     //POST
     @PostMapping("/guardar")
-    public ResponseEntity<Turno> guardarTurno(@RequestBody Turno turno){
-        return ResponseEntity.ok(turnoService.guardarTurno(turno));
+    public ResponseEntity<TurnoResponseDto> guardarTurno(@RequestBody TurnoRequestDto turnoRequestDto){
+        return ResponseEntity.ok(turnoService.guardarTurno(turnoRequestDto));
     }
 
     //GET TODOS
     @GetMapping("/buscartodos")
-    public ResponseEntity<List<Turno>> buscarTodos(){
+    public ResponseEntity<List<TurnoResponseDto>> buscarTodos(){
 
         return ResponseEntity.ok(turnoService.buscarTodos());
     }
@@ -35,20 +39,15 @@ public class TurnoController {
     //PUT
 
     @PutMapping("/modificar")
-    public ResponseEntity<String>  modificar(@RequestBody Turno turno){
-        Optional<Turno> turnoEncontrado = turnoService.buscarPorId(turno.getId());
-        if(turnoEncontrado.isPresent()){
-            turnoService.modificarTurno(turno);
-            return ResponseEntity.ok("el turno fue modificado");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public ResponseEntity<String>  modificarTurno(@RequestBody TurnoModifyDto turnoModifyDto){
+        turnoService.modificarTurno(turnoModifyDto);
+        return ResponseEntity.ok("{\"mensaje\": \"El turno fue modificado\"}");
     }
 
     //DELETE
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<String> eliminar(@PathVariable Integer id){
-        Optional<Turno> turnoEncontrado = turnoService.buscarPorId(id);
+        Optional<TurnoResponseDto> turnoEncontrado = turnoService.buscarPorId(id);
         if(turnoEncontrado.isPresent()) {
             turnoService.eliminarTurno(id);
             return ResponseEntity.ok("el turno fue eliminado");
@@ -59,8 +58,8 @@ public class TurnoController {
 
     //GET
     @GetMapping("/buscar/{id}")
-    public ResponseEntity<Turno>  buscarPorId(@PathVariable Integer id){
-        Optional<Turno> turnoEncontrado = turnoService.buscarPorId(id);
+    public ResponseEntity<TurnoResponseDto>  buscarPorId(@PathVariable Integer id){
+        Optional<TurnoResponseDto> turnoEncontrado = turnoService.buscarPorId(id);
         if(turnoEncontrado.isPresent()) {
             return ResponseEntity.ok(turnoEncontrado.get());
         } else {
@@ -68,5 +67,10 @@ public class TurnoController {
         }
     }
 
+    @GetMapping("/buscarTurnoApellido/{apellido}")
+    public ResponseEntity<TurnoResponseDto> buscarTurnoPorApellido(@PathVariable String apellido){
+        Optional<TurnoResponseDto> turno = turnoService.buscarTurnosPorPaciente(apellido);
+        return ResponseEntity.ok(turno.get());
+    }
 
 }

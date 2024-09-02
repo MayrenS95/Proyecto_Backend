@@ -3,6 +3,7 @@ package Proyecto_Backend.Proyecto.service.impl;
 import Proyecto_Backend.Proyecto.entity.Odontologo;
 import Proyecto_Backend.Proyecto.repository.IOdontologoRepository;
 import Proyecto_Backend.Proyecto.service.IOdontologoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,11 +11,8 @@ import java.util.Optional;
 
 @Service
 public class OdontologoService implements IOdontologoService {
+    @Autowired
     private IOdontologoRepository odontologoRepository;
-
-    public OdontologoService(IOdontologoRepository odontologoRepository) {
-        this.odontologoRepository = odontologoRepository;
-    }
 
     @Override
     public Odontologo guardarOdontologo(Odontologo odontologo) {
